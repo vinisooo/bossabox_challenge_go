@@ -2,15 +2,14 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	"vuttr/api/controllers"
 )
 
 func ToolRoutes(router *gin.Engine) *gin.RouterGroup {
 
-	routes := router.Group("")
+	routes := router.Group("api/tools")
 	{
-		router.GET("/test", func(c *gin.Context) {
-			c.JSON(200, "working just fine :)")
-		})
+		routes.POST("", controllers.InsertTool)
 	}
 
 	return routes

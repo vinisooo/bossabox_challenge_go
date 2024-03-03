@@ -1,14 +1,18 @@
 package main
 
 import (
-	"vuttr/initializers"
-	"vuttr/api/routes"
 	"github.com/gin-gonic/gin"
+	"vuttr/api/models"
+	"vuttr/api/routes"
+	"vuttr/initializers"
 )
 
 func init() {
 	initializers.LoadEnvVariables()
 	initializers.DBConnect()
+
+	initializers.DB.AutoMigrate(&models.Tool{})
+	initializers.DB.AutoMigrate(&models.Tag{})
 }
 
 func main() {

@@ -41,9 +41,7 @@ func InsertTool(c *gin.Context) {
 		return
 	}
 
-	c.JSON(201, gin.H{
-		"tool": body,
-	})
+	c.JSON(201, body)
 }
 
 func GetTools(c *gin.Context) {
@@ -56,7 +54,26 @@ func GetTools(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"tools": tools,
-	})
+	c.JSON(200, tools)
+}
+
+func GetToolById(c *gin.Context) {
+	var tool []models.Tool
+	toolId := c.Param("toolId")
+
+	foundTool := initializers.DB.Preload("Tags").Find(&tool, "tools.id = ?", toolId)
+
+	if foundTool.Error != nil {
+		c.Status(500)
+		return
+	}
+
+	if len(tool) < 1 {
+		c.JSON(404, gin.H{
+			"message": "No results for id " + toolId,
+		})
+		return
+	}
+
+	c.JSON(200, tool[0])
 }

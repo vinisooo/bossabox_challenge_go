@@ -45,3 +45,18 @@ func InsertTool(c *gin.Context) {
 		"tool": body,
 	})
 }
+
+func GetTools(c *gin.Context) {
+	var tools []models.Tool
+	foundTools := initializers.DB.Preload("Tags").Find(&tools)
+
+
+	if foundTools.Error != nil {
+		c.Status(500)
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"tools": tools,
+	})
+}

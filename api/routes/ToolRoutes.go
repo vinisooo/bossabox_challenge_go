@@ -9,6 +9,7 @@ func ToolRoutes(router *gin.Engine) *gin.RouterGroup {
 
 	routes := router.Group("api/tools")
 	{
+		routes.GET("", controllers.GetTools)
 		routes.POST("", controllers.InsertTool)
 	}
 

@@ -46,10 +46,18 @@ func InsertTool(c *gin.Context) {
 
 func GetTools(c *gin.Context) {
 	var tools []models.Tool
-	foundTools := initializers.DB.Preload("Tags").Find(&tools)
+	tag := c.Query("tag")
+	query := initializers.DB.Preload("Tags").Find(&tools)
 
+	if tag != "" {
+		query = initializers.DB.Preload("Tags").
+		Joins("JOIN tool_tags ON tools.id = tool_tags.tool_id").
+		Joins("JOIN tags ON tool_tags.tag_id = tags.id").
+		Where("tags.title = ?", tag).
+		Find(&tools)
+	}
 
-	if foundTools.Error != nil {
+	if query.Error != nil {
 		c.Status(500)
 		return
 	}
